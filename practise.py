@@ -1,22 +1,23 @@
+#Contour Detection
 import cv2 as cv
 import numpy as np
-pic=cv.imread('pic.png')
-cv.imshow('pic',pic)
-def translate(image,x,y):
-    transMat=np.float32([[1,0,x],[0,1,y]])
-    dimension=(image.shape[1],image.shape[0])
-    return cv.warpAffine(image,transMat,dimension)
-tr=translate(pic,200,300)
-cv.imshow('Trasnlated',tr)
-def rotate(image,angle,axisP=None):
-    (height,width)=image.shape[:2]
-    if(axisP==None):
-        axisP=(width//2,height//2)
-    rotationMat=cv.getRotationMatrix2D(axisP,angle,1.0)
-    dimension=(width,height)
-    return cv.warpAffine(image,rotationMat,dimension)
-r=rotate(pic,30)
-cv.imshow('rotated',r)
-resized=cv.resize(pic,(500,500),interpolation=cv.INTER_CUBIC)
-cv.imshow('resized',resized)
+image1=cv.imread('pic3.jpg')
+image=cv.resize(image1,(800,500),interpolation=cv.INTER_CUBIC)
+blank=np.zeros(image.shape[:2],dtype='uint8')
+
+cv.imshow('image',image)
+gray=cv.cvtColor(image,cv.COLOR_BGR2GRAY)
+cv.imshow('gray',gray)
+blur=cv.GaussianBlur(image,(5,5),cv.BORDER_DEFAULT)
+cv.imshow('blur',blur)
+#canny
+canny=cv.Canny(blur,125,175)
+cv.imshow('canny',canny)
+#contour
+res,thres=cv.threshold(gray,125,255,cv.THRESH_BINARY)
+cv.imshow('thres',thres)
+contours,heirarchies=cv.findContours(thres,cv.RETR_LIST,cv.CHAIN_APPROX_NONE)
+print(len(contours))
+d=cv.drawContours(blank,contours,-1,(255,0,0),1)
+cv.imshow('draw',d)
 cv.waitKey(0)
