@@ -7,7 +7,7 @@ average=cv.blur(image,(7,7))
 cv.imshow('average',average)
 #guassian blur is more natural and is less blur 
 guass=cv.GaussianBlur(image,(7,7),0) #third arhgument is deviation in x
-#median it used to remove noise 3 is the kernel size
+#median it used to remove noise, 3 is the kernel size
 median=cv.medianBlur(image,3)
 cv.imshow('median',median)
 
